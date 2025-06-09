@@ -123,7 +123,7 @@ function App() {
     <>
       <div className="w-full bg-gray-50 h-16 border-b border-b-gray-300 flex items-center justify-between px-4 sm:px-6 md:px-10">
 
-        <img src="../src/assets/images/fav-icon.png" alt="logo" className="w-10 h-10" />
+        <img src="../src/assets/images/fav-icon.png" alt="logo" className="w-10 h-10" draggable="false" />
 
         <div className="flex gap-2 items-center">
 
@@ -131,11 +131,13 @@ function App() {
 
           <div
             className={`shadow-md rounded px-3 py-1 text-sm sm:text-base
-            ${timeLeft <= 10
-                ? "border border-red-700 text-red-700"
-                : timeLeft <= 15
-                  ? "border border-red-300 text-red-400"
-                  : "border border-gray-400 text-gray-700"}`}>
+            ${timeLeft <= 5 ?
+                "border border-red-800 text-red-800" :
+                timeLeft <= 10 ?
+                  "border border-red-600 text-red-600" :
+                  timeLeft <= 15 ?
+                    "border border-red-300 text-red-400" :
+                    "border border-gray-400 text-gray-700"}`}>
 
             {formatTime(timeLeft)}
 
@@ -157,7 +159,7 @@ function App() {
           </button>
 
         ))}
-        
+
       </div>
 
       <div className="mt-10 px-4 flex flex-col items-center">
@@ -199,20 +201,20 @@ function App() {
             <button
               onClick={() => setCurrentIndex(prev => Math.max(prev - 1, 0))}
               disabled={currentIndex === 0}
-              className="w-full sm:w-auto px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+              className="w-full sm:w-auto px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg shadow-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
               Previous
             </button>
 
             <button
               onClick={() => setCurrentIndex(prev => Math.min(prev + 1, questions.length - 1))}
               disabled={currentIndex === questions.length - 1}
-              className="w-full sm:w-auto px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+              className="w-full sm:w-auto px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
               Next
             </button>
 
           </div>
 
-          <button className="w-full sm:w-auto px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg shadow-md">
+          <button className="w-full sm:w-auto px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold cursor-pointer rounded-lg shadow-md">
             Finish
           </button>
 
