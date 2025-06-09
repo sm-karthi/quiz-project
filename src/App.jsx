@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import ScorePage from "./ScorePage";
 
 function App() {
   let [timeLeft, setTimeLeft] = useState(300);
   let [currentIndex, setCurrentIndex] = useState(0);
   let [userAnswers, setUserAnswers] = useState({});
+  let [showScorePage, setShowScorePage] = useState(false);
+
 
   let questions = [
     {
@@ -12,79 +15,89 @@ function App() {
       type: "MCQ",
       question: "Which language is used to style web pages?",
       options: ["HTML", "JQuery", "CSS", "XML"],
-      answer: "CSS"
+      answer: "CSS",
+      mark: 5
     },
     {
       id: 2,
       type: "MSQ",
       question: "Which of the following are JavaScript data types?",
       options: ["String", "Boolean", "Integer", "Document"],
-      answer: ["String", "Boolean"]
+      answer: ["String", "Boolean"],
+      mark: 10
     },
     {
       id: 3,
       type: "MCQ",
       question: "Which tag is used to define a JavaScript code?",
       options: ["<script>", "<js>", "<code>", "<javascript>"],
-      answer: "<script>"
+      answer: "<script>",
+      mark: 5
     },
     {
       id: 4,
       type: "MSQ",
       question: "Which of the following are looping structures in JavaScript?",
       options: ["for", "while", "repeat", "loop"],
-      answer: ["for", "while"]
+      answer: ["for", "while"],
+      mark: 10
     },
     {
       id: 5,
       type: "MCQ",
       question: "Which of the following is not a programming language?",
       options: ["Python", "HTML", "Java", "C++"],
-      answer: "HTML"
+      answer: "HTML",
+      mark: 5
     },
     {
       id: 6,
       type: "MSQ",
       question: "Which are valid variable names in JavaScript?",
       options: ["1name", "_name", "name$", "var-name"],
-      answer: ["_name", "name$"]
+      answer: ["_name", "name$"],
+      mark: 10
     },
     {
       id: 7,
       type: "MCQ",
       question: "Which symbol is used for single-line comments in JavaScript?",
       options: ["#", "//", "/*", "<!--"],
-      answer: "//"
+      answer: "//",
+      mark: 5
     },
     {
       id: 8,
       type: "MSQ",
       question: "Which of these are JavaScript frameworks/libraries?",
       options: ["React", "Vue", "Flask", "Angular"],
-      answer: ["React", "Vue", "Angular"]
+      answer: ["React", "Vue", "Angular"],
+      mark: 10
     },
     {
       id: 9,
       type: "MCQ",
       question: "Which keyword is used to declare a variable in JavaScript?",
       options: ["int", "var", "let", "define"],
-      answer: "var"
+      answer: "var",
+      mark: 5
     },
     {
       id: 10,
       type: "MSQ",
       question: "Which of the following are valid boolean values in JavaScript?",
       options: ["yes", "true", "false", "no"],
-      answer: ["true", "false"]
+      answer: ["true", "false"],
+      mark: 10
     }
   ];
-
 
   useEffect(() => {
     let timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
           clearInterval(timer);
+
           return 0;
         }
         return prev - 1;
@@ -102,10 +115,12 @@ function App() {
   let handleMCQChange = (selectedOption) => {
     let updated = { ...userAnswers, [currentIndex]: [selectedOption] };
     setUserAnswers(updated);
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex);
-    }
+    // if (currentIndex < questions.length - 1) {
+    //   setCurrentIndex(currentIndex);
+    // }
   };
+
+
 
   let handleMSQChange = (selectedOption) => {
     let prevAnswers = userAnswers[currentIndex] || [];
@@ -119,9 +134,20 @@ function App() {
   let currentQ = questions[currentIndex];
   let selected = userAnswers[currentIndex] || [];
 
+
+  if (showScorePage) {
+    return <ScorePage questions={questions} userAnswers={userAnswers}/>;
+  }
+
+  if (timeLeft === 0) {
+    setShowScorePage(true);
+  }
+
+
+
   return (
     <>
-      <div className="w-full bg-gray-50 h-16 border-b border-b-gray-300 flex items-center justify-between px-4 sm:px-6 md:px-10">
+      <div className="w-full bg-gray-50 h-16 border-b border-b-gray-300 flex items-center justify-between px-4 sm:px-6 md:px-10 shadow">
 
         <img src="../src/assets/images/fav-icon.png" alt="logo" className="w-10 h-10" draggable="false" />
 
@@ -149,7 +175,7 @@ function App() {
 
       <div className="flex gap-2 justify-center flex-wrap mt-6 px-2">
 
-        {questions.map((q, idx) => (
+        {questions.map((ques, idx) => (
 
           <button
             onClick={() => setCurrentIndex(idx)}
@@ -170,7 +196,7 @@ function App() {
 
         <div className="space-y-3 w-full max-w-md">
 
-          {currentQ.options.map((opt, idx) => (
+          {currentQ.options.map((opt) => (
 
             <label
               className="flex items-center py-2 px-3 border border-gray-400 rounded-md cursor-pointer hover:bg-blue-50 shadow-md bg-white">
@@ -201,7 +227,7 @@ function App() {
             <button
               onClick={() => setCurrentIndex(prev => Math.max(prev - 1, 0))}
               disabled={currentIndex === 0}
-              className="w-full sm:w-auto px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg shadow-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
+              className="w-full sm:w-auto px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg shadow-lg disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
               Previous
             </button>
 
@@ -214,7 +240,8 @@ function App() {
 
           </div>
 
-          <button className="w-full sm:w-auto px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold cursor-pointer rounded-lg shadow-md">
+          <button onClick={() => setShowScorePage(true)}
+            className="w-full sm:w-auto px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold cursor-pointer rounded-lg shadow-lg">
             Finish
           </button>
 
