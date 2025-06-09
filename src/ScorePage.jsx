@@ -1,60 +1,51 @@
 import React from "react";
 
 function ScorePage({ questions, userAnswers }) {
+    document.title = "Quiz - Result";
 
-    document.title = "Quiz - Result"
+    let total = 0;
+    let totalScore = 0;
 
-    let calculateScore = () => {
-        let total = 0;
-        let totalScore = 0;
 
-        let results = questions.map((q, index) => {
-            let userAns = userAnswers[index] || [];
-            let correctAns = Array.isArray(q.answer) ? q.answer : [q.answer];
+    const results = questions.map((ques, index) => {
+        const userAns = userAnswers[index] || [];
+        const correctAns = Array.isArray(ques.answer) ? ques.answer : [ques.answer];
 
-            totalScore += q.mark;
+        totalScore += ques.mark;
+        let isCorrect = false;
+        let marksAwarded = 0;
 
-            let isCorrect = false;
-            let marksAwarded = 0;
+        if (Array.isArray(ques.answer)) {
+            const correctSelected = userAns.filter(ans => correctAns.includes(ans));
+            const incorrectSelected = userAns.filter(ans => !correctAns.includes(ans));
 
-            if (Array.isArray(q.answer)) {
-                let correctSelected = userAns.filter(ans => correctAns.includes(ans));
-                let incorrectSelected = userAns.filter(ans => !correctAns.includes(ans));
-
-                if (!incorrectSelected.length && correctSelected.length) {
-                    marksAwarded = Math.round((correctSelected.length / correctAns.length) * (q.mark || 0));
-                    total += marksAwarded;
-                    isCorrect = correctSelected.length === correctAns.length;
-                }
-            } else {
-                isCorrect = userAns[0] === correctAns[0];
-                if (isCorrect) {
-                    marksAwarded = q.mark || 0;
-                    total += marksAwarded;
-                }
+            if (correctSelected.length && !incorrectSelected.length) {
+                marksAwarded = Math.round((correctSelected.length / correctAns.length) * ques.mark);
+                total += marksAwarded;
+                isCorrect = correctSelected.length === correctAns.length;
             }
+        } else {
+            isCorrect = userAns[0] === correctAns[0];
+            if (isCorrect) {
+                marksAwarded = ques.mark;
+                total += marksAwarded;
+            }
+        }
 
-            return { ...q, isCorrect, userAns, marksAwarded };
-        });
+        return { ...ques, isCorrect, userAns, marksAwarded };
+    });
 
-        return { results, total, totalScore };
-    };
 
-    let { results, total, totalScore } = calculateScore();
 
     return (
         <div className="p-6 md:px-32">
-
             <h2 className="text-2xl text-green-500 font-bold mb-4">
                 Your Score: {total} / {totalScore}
             </h2>
 
             <ul className="space-y-4">
-
                 {results.map((q, idx) => (
-
-                    <li key={q.id} className="border border-gray-300 p-4 rounded-md shadow-md">
-
+                    <li className="border border-gray-300 p-4 rounded-md shadow-md">
                         <h3 className="font-semibold">Q{idx + 1}. {q.question}</h3>
 
                         <p className="mt-1">
@@ -65,21 +56,16 @@ function ScorePage({ questions, userAnswers }) {
                             Correct Answer: {Array.isArray(q.answer) ? q.answer.join(", ") : q.answer}
                         </p>
 
-                        <p className={`mt-1 font-bold ${q.marksAwarded ? "text-green-600" : "text-red-600"}`}>
-
+                        <p className={`mt-1 font-bold ${q.marksAwarded ?
+                            "text-green-600" : "text-red-600"}`}>
                             {q.marksAwarded
                                 ? `Correct (+${q.marksAwarded} / ${q.mark})`
                                 : `Incorrect (0 / ${q.mark})`}
                         </p>
-
                     </li>
-
                 ))}
-
             </ul>
-
         </div>
-
     );
 }
 
