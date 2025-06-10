@@ -93,18 +93,18 @@ function App() {
   ];
 
   useEffect(() => {
-    let timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
 
-          return 0;
-        }
-        return prev - 1;
-      });
+    if (timeLeft <= 0) {
+      setShowScorePage(true);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setTimeLeft(timeLeft - 1);
     }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+
+  }, [timeLeft]);
+
 
   let formatTime = (sec) => {
     let m = Math.floor(sec / 60).toString().padStart(2, "0");
@@ -115,9 +115,7 @@ function App() {
   let handleMCQChange = (selectedOption) => {
     let updated = { ...userAnswers, [currentIndex]: [selectedOption] };
     setUserAnswers(updated);
-    // if (currentIndex < questions.length - 1) {
-    //   setCurrentIndex(currentIndex);
-    // }
+
   };
 
 
@@ -136,11 +134,7 @@ function App() {
 
 
   if (showScorePage) {
-    return <ScorePage questions={questions} userAnswers={userAnswers}/>;
-  }
-
-  if (timeLeft === 0) {
-    setShowScorePage(true);
+    return <ScorePage questions={questions} userAnswers={userAnswers} />;
   }
 
 
@@ -225,18 +219,27 @@ function App() {
           <div className="flex gap-4 w-full sm:w-auto justify-center">
 
             <button
-              onClick={() => setCurrentIndex(prev => Math.max(prev - 1, 0))}
+              onClick={() => {
+
+                setCurrentIndex(currentIndex - 1);
+
+              }}
               disabled={currentIndex === 0}
               className="w-full sm:w-auto px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg shadow-lg disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
               Previous
             </button>
 
             <button
-              onClick={() => setCurrentIndex(prev => Math.min(prev + 1, questions.length - 1))}
+              onClick={() => {
+
+                setCurrentIndex(currentIndex + 1);
+
+              }}
               disabled={currentIndex === questions.length - 1}
               className="w-full sm:w-auto px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
               Next
             </button>
+
 
           </div>
 
