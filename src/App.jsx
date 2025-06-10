@@ -184,7 +184,7 @@ function App() {
 
           <button
             onClick={() => setCurrentIndex(idx)}
-            className={`px-3 py-1 mb-2 rounded-2xl text-sm font-semibold cursor-pointer text-white
+            className={`px-3 py-1 mb-2 rounded-2xl text-sm font-semibold cursor-pointer text-white shadow-lg
             ${currentIndex === idx ? "bg-green-700" : "bg-green-400 hover:bg-green-500"}`}>
             {idx + 1}
           </button>
