@@ -94,7 +94,7 @@ function App() {
 
   useEffect(() => {
 
-    if (timeLeft <= 0) {
+    if (timeLeft === 0) {
       setShowScorePage(true);
       return;
     }
