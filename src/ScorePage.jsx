@@ -7,17 +7,17 @@ function ScorePage({ questions, userAnswers }) {
     let totalScore = 0;
 
 
-    const results = questions.map((ques, index) => {
-        const userAns = userAnswers[index] || [];
-        const correctAns = Array.isArray(ques.answer) ? ques.answer : [ques.answer];
+    let results = questions.map((ques, index) => {
+        let userAns = userAnswers[index] || [];
+        let correctAns = Array.isArray(ques.answer) ? ques.answer : [ques.answer];
 
         totalScore += ques.mark;
         let isCorrect = false;
         let marksAwarded = 0;
 
         if (Array.isArray(ques.answer)) {
-            const correctSelected = userAns.filter(ans => correctAns.includes(ans));
-            const incorrectSelected = userAns.filter(ans => !correctAns.includes(ans));
+            let correctSelected = userAns.filter(ans => correctAns.includes(ans));
+            let incorrectSelected = userAns.filter(ans => !correctAns.includes(ans));
 
             if (correctSelected.length && !incorrectSelected.length) {
                 marksAwarded = Math.round((correctSelected.length / correctAns.length) * ques.mark);

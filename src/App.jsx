@@ -100,7 +100,7 @@ function App() {
       return;
     }
 
-    const timer = setTimeout(() => {
+    let timer = setTimeout(() => {
       setTimeLeft(timeLeft - 1);
     }, 1000);
 
