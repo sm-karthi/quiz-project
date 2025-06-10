@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import React, { Suspense } from 'react';
 import "./App.css";
-import ScorePage from "./ScorePage";
 import logo from "./assets/images/fav-icon.png"
+
+const ScorePage = React.lazy(() => import('./ScorePage'))
 
 function App() {
   let [timeLeft, setTimeLeft] = useState(300);
@@ -135,7 +137,15 @@ function App() {
 
 
   if (showScorePage) {
-    return <ScorePage questions={questions} userAnswers={userAnswers} />;
+    return (
+
+      <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+
+        <ScorePage questions={questions} userAnswers={userAnswers} />;
+
+      </Suspense>
+
+    )
   }
 
 
