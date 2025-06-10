@@ -143,7 +143,7 @@ function App() {
     <>
       <div className="w-full bg-gray-50 h-16 border-b border-b-gray-300 flex items-center justify-between px-4 sm:px-6 md:px-10 shadow">
 
-        <img src="../src/assets/images/fav-icon.png" alt="logo" className="w-10 h-10" draggable="false" />
+        <img src="./assets/images/fav-icon.png" alt="logo" className="w-10 h-10" draggable="false" />
 
         <div className="flex gap-2 items-center">
 
